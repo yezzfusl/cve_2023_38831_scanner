@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVE-2023-38831 Scanner</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>CVE-2023-38831 Scanner</h1>
+    <button onclick="startScan()">Start Scan</button>
+    <div id="result"></div>
+    <canvas id="scanChart" width="400" height="200"></canvas>
+    <script>
+        function startScan() {
+            fetch('/scan', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('result').innerHTML = `
+                        Scan complete. Vulnerable: ${data.is_vulnerable}<br>
+                        WinRAR version: ${data.version_or_error}
+                    `;
+                    updateChart();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('result').innerHTML = 'Error during scan';
+                });
+        }
+
+        function updateChart() {
+            fetch('/results')
+                .then(response => response.json())
+                .then(data => {
+                    const ctx = document.getElementById('scanChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: data.labels,
+                            datasets: [{
+                                label: 'Vulnerable Scans',
+                                data: data.vulnerable_counts,
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1
+                            }, {
+                                label: 'Non-Vulnerable Scans',
+                                data: data.non_vulnerable_counts,
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                });
+        }
+
+        updateChart();
+    </script>
+</body>
+</html>
