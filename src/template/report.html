@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Results</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Scan Results</h1>
+    <table>
+        <tr>
+            <th>Timestamp</th>
+            <th>Vulnerable</th>
+            <th>WinRAR Version</th>
+            <th>Integrity Check</th>
+            <th>Memory Scan</th>
+            <th>Network Scan</th>
+            <th>Sandbox Result</th>
+        </tr>
+        {% for result in results %}
+        <tr>
+            <td>{{ result[1] }}</td>
+            <td>{{ 'Yes' if result[2] else 'No' }}</td>
+            <td>{{ result[3] }}</td>
+            <td>{{ result[4] }}</td>
+            <td>{{ result[5] }}</td>
+            <td>{{ result[6] }}</td>
+            <td>{{ result[7] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
