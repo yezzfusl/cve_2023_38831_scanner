@@ -5,7 +5,7 @@ setup(
     version="0.2",
     packages=find_packages(),
     install_requires=[
-        "pytest==8.3.2",
+        "pytest==8.3.4",
         "argparse==1.4.0",
     ],
     entry_points={
